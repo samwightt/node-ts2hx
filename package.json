@@ -4,7 +4,8 @@
 	"description": "Transpile Typescript to Haxe.",
 	"main": "src/ts2hx.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "mocha",
+		"test:watch": "mocha --watch --recursive"
 	},
 	"bin": {
 		"ts2hx": "./src/cli/ts2hx"
@@ -23,5 +24,9 @@
 		"persist": "^0.2.7",
 		"ts-orderer": "^0.1.1",
 		"ts2json": "^1.0.5"
+	},
+	"devDependencies": {
+		"chai": "^4.3.6",
+		"mocha": "^9.2.2"
 	}
 }
