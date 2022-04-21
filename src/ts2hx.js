@@ -99,7 +99,7 @@ class HXDumper {
   dump() {
     // Reset data
     this.indent = 0;
-    this.writer.output = "";
+    this.writer.clearOutput();
     this.context = {};
     this.rootContext = {};
     this.hasWrittenPackage = false;
@@ -672,7 +672,7 @@ class HXDumper {
         previousOutput = this.writer.output;
         numberOfLinesInPreviousOutput = this.writer.output.split("\n").length;
         this.numberOfLinesBeforeOutput += numberOfLinesInPreviousOutput;
-        this.writer.output = "";
+        this.writer.clearOutput();
         this.hasClosures = false;
 
         // Add 1 for the '__this = ...' line if the content has closures
@@ -845,7 +845,7 @@ class HXDumper {
         previousOutput = this.writer.output;
         numberOfLinesInPreviousOutput = this.writer.output.split("\n").length;
         this.numberOfLinesBeforeOutput += numberOfLinesInPreviousOutput;
-        this.writer.output = "";
+        this.writer.clearOutput();
         this.hasClosures = false;
 
         // Add 1 for the '__this = ...' line if the content has closures
@@ -2403,11 +2403,16 @@ class HXDumper {
   value(input, options) {
     var wasExtractingValue = this.isExtractingValue;
     this.isExtractingValue = true;
-    var previousOutput = this.writer.output;
-    this.writer.output = "";
+
+    var tempWriter = new Writer();
+    var currentWriter = this.writer;
+    this.writer = tempWriter;
+
     this.dumpValue(input, options);
-    var value = this.writer.output;
-    this.writer.output = previousOutput;
+
+    var value = tempWriter.output;
+    this.writer = currentWriter;
+
     this.isExtractingValue = wasExtractingValue;
     return value;
   }

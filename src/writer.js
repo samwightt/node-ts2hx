@@ -20,6 +20,10 @@ class Writer {
   writeLineBreak() {
     this.write("\n");
   }
+
+  clearOutput() {
+    this.output = "";
+  }
 }
 
 module.exports = Writer;
