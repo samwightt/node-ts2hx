@@ -16,6 +16,10 @@ class Writer {
   write(str) {
     this.output += str;
   }
+
+  writeLineBreak() {
+    this.write("\n");
+  }
 }
 
 module.exports = Writer;

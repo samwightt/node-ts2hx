@@ -137,8 +137,8 @@ class HXDumper {
     if (!hasCustomModule && !this.hasWrittenPackage) {
       this.hasWrittenPackage = true;
       this.writer.write("package;");
-      this.writeLineBreak();
-      this.writeLineBreak();
+      this.writer.writeLineBreak();
+      this.writer.writeLineBreak();
     }
 
     var hasImportsBefore = false;
@@ -148,20 +148,20 @@ class HXDumper {
       if (element.classKeyword) {
         if (hasImportsBefore) {
           hasImportsBefore = false;
-          this.writeLineBreak();
+          this.writer.writeLineBreak();
         }
         this.dumpClass(element);
       } else if (element.moduleKeyword && !this.hasWrittenPackage) {
         if (hasImportsBefore) {
           hasImportsBefore = false;
-          this.writeLineBreak();
+          this.writer.writeLineBreak();
         }
         this.hasWrittenPackage = true;
         this.dumpModule(element);
       } else if (element.interfaceKeyword) {
         if (hasImportsBefore) {
           hasImportsBefore = false;
-          this.writeLineBreak();
+          this.writer.writeLineBreak();
         }
         this.dumpInterface(element);
       } else if (element.importKeyword) {
@@ -171,7 +171,7 @@ class HXDumper {
         var modifiers = this.modifiers(element);
         if (!modifiers.declare) {
           this.dumpValue(element);
-          this.writeLineBreak();
+          this.writer.writeLineBreak();
         }
       }
     }
@@ -199,7 +199,7 @@ class HXDumper {
     if (element.semicolonToken != null) {
       this.writer.write(";");
     }
-    this.writeLineBreak();
+    this.writer.writeLineBreak();
 
     if (element.identifier != null && moduleReferenceLastPart != null) {
       var identifier = this.value(element.identifier);
@@ -217,8 +217,8 @@ class HXDumper {
     this.updateLineMappingWithInput(element.moduleKeyword);
     this.dumpValue(element.name);
     this.writer.write(";");
-    this.writeLineBreak();
-    this.writeLineBreak();
+    this.writer.writeLineBreak();
+    this.writer.writeLineBreak();
     this.dumpModuleElements(element.moduleElements);
   }
 
@@ -251,8 +251,8 @@ class HXDumper {
     this.inInterface = wasInInterface;
     this.interfaceName = this.previousInterfaceName;
 
-    this.writeLineBreak();
-    this.writeLineBreak();
+    this.writer.writeLineBreak();
+    this.writer.writeLineBreak();
   }
 
   dumpHeritageClauses(heritageClauses) {
@@ -338,8 +338,8 @@ class HXDumper {
     this.writer.write(" {");
 
     // Add line break
-    this.writeLineBreak();
-    this.writeLineBreak();
+    this.writer.writeLineBreak();
+    this.writer.writeLineBreak();
 
     // Dump content
     this.indent++;
@@ -351,7 +351,7 @@ class HXDumper {
     // Add line
     this.updateLineMappingWithInput(element.closeBraceToken);
     this.writeIndentedLine("}");
-    this.writeLineBreak();
+    this.writer.writeLineBreak();
 
     this.className = previousClassName;
 
@@ -527,8 +527,8 @@ class HXDumper {
     }
 
     this.writer.write(";");
-    this.writeLineBreak();
-    this.writeLineBreak();
+    this.writer.writeLineBreak();
+    this.writer.writeLineBreak();
   }
 
   dumpClassPropertyFromAccessor(element) {
@@ -610,7 +610,7 @@ class HXDumper {
             var identifier = this.extract(parameter.identifier);
             this.writeIndentSpaces();
             this.writer.write("this." + identifier + " = " + identifier + ";");
-            this.writeLineBreak();
+            this.writer.writeLineBreak();
           }
         }
       }
@@ -657,7 +657,7 @@ class HXDumper {
 
     if (element.block) {
       this.writer.write(" {");
-      this.writeLineBreak();
+      this.writer.writeLineBreak();
       this.indent++;
       this.pushContext();
 
@@ -711,7 +711,7 @@ class HXDumper {
       this.indent--;
       this.writeIndentedLine("}");
     }
-    this.writeLineBreak();
+    this.writer.writeLineBreak();
 
     this.thisPrefix = previousThisPrefix;
 
@@ -737,7 +737,7 @@ class HXDumper {
     if (modifiers["static"] && element.callSignature.typeParameterList) {
       // Generic method
       this.writer.write("@:generic");
-      this.writeLineBreak();
+      this.writer.writeLineBreak();
       this.writeIndentSpaces();
     }
 
@@ -833,7 +833,7 @@ class HXDumper {
 
     if (element.block) {
       this.writer.write(" {");
-      this.writeLineBreak();
+      this.writer.writeLineBreak();
       this.indent++;
       this.pushContext();
 
@@ -897,7 +897,7 @@ class HXDumper {
       this.indent--;
       this.writeIndentedLine("}");
     }
-    this.writeLineBreak();
+    this.writer.writeLineBreak();
 
     this.thisPrefix = previousThisPrefix;
 
@@ -969,7 +969,7 @@ class HXDumper {
       this.writeIndentSpaces();
       this.dumpValue(statement);
       if (!dontFinishWithLineBreak || i < len - 1) {
-        this.writeLineBreak();
+        this.writer.writeLineBreak();
       }
     }
   }
@@ -1017,7 +1017,7 @@ class HXDumper {
       if (i < len - 1) {
         this.writer.write(",");
       }
-      this.writeLineBreak();
+      this.writer.writeLineBreak();
     }
   }
 
@@ -1130,7 +1130,7 @@ class HXDumper {
       if (input.enumElements) {
         var len = input.enumElements.length;
         for (var i = 0; i < len; i++) {
-          this.writeLineBreak();
+          this.writer.writeLineBreak();
           this.writeIndentSpaces();
           var el = input.enumElements[i];
           this.dumpValue(el.propertyName);
@@ -1138,20 +1138,20 @@ class HXDumper {
         }
       }
       this.indent--;
-      this.writeLineBreak();
+      this.writer.writeLineBreak();
       this.writer.write("}");
-      this.writeLineBreak();
+      this.writer.writeLineBreak();
     } else if (input.firstSemicolonToken && input.forKeyword) {
       if (input.variableDeclaration) {
         this.dumpVariableDeclaration(input.variableDeclaration);
         this.writer.write(";");
-        this.writeLineBreak();
+        this.writer.writeLineBreak();
         this.writeIndentSpaces();
       }
       if (input.initializer) {
         this.dumpValue(input.initializer);
         this.writer.write(";");
-        this.writeLineBreak();
+        this.writer.writeLineBreak();
         this.writeIndentSpaces();
       }
       this.updateLineMappingWithInput(input.forKeyword);
@@ -1163,7 +1163,7 @@ class HXDumper {
         this.writer.write("{");
         this.indent++;
         this.pushContext();
-        this.writeLineBreak();
+        this.writer.writeLineBreak();
         this.writeIndentSpaces();
       }
       statement.extraBottomStatement = input.incrementor;
@@ -1171,7 +1171,7 @@ class HXDumper {
       if (!statement.closeBraceToken) {
         this.indent--;
         this.popContext();
-        this.writeLineBreak();
+        this.writer.writeLineBreak();
         this.writeIndentSpaces();
         this.writer.write("}");
       }
@@ -1247,7 +1247,7 @@ class HXDumper {
         for (var i = 0; i < len; i++) {
           var clause = input.switchClauses[i];
           if (!hasStartedCase) {
-            this.writeLineBreak();
+            this.writer.writeLineBreak();
             this.writeIndentSpaces();
             if (clause.caseKeyword) {
               this.writer.write("case ");
@@ -1272,7 +1272,7 @@ class HXDumper {
                 statements.push(statement);
               }
             }
-            this.writeLineBreak();
+            this.writer.writeLineBreak();
             this.indent++;
             this.pushContext();
             this.dumpStatements(statements, true);
@@ -1282,7 +1282,7 @@ class HXDumper {
         }
       }
       this.indent--;
-      this.writeLineBreak();
+      this.writer.writeLineBreak();
       this.writeIndentSpaces();
       this.writer.write("}");
     } else if (
@@ -1440,7 +1440,7 @@ class HXDumper {
           this.dumpValue(input.block);
         }
         if (input.identifier && input.functionKeyword) {
-          this.writeLineBreak();
+          this.writer.writeLineBreak();
         }
       }
       if (input.openBraceToken) {
@@ -1448,13 +1448,13 @@ class HXDumper {
         this.updateLineMappingWithInput(input.openBraceToken);
         this.indent++;
         this.pushContext();
-        this.writeLineBreak();
+        this.writer.writeLineBreak();
       }
       if (input.extraTopStatement) {
         this.writeIndentSpaces();
         this.dumpValue(input.extraTopStatement);
         this.writer.write(";");
-        this.writeLineBreak();
+        this.writer.writeLineBreak();
       }
       if (input.typeMembers) {
         this.dumpTypeMembers(input.typeMembers);
@@ -1690,10 +1690,10 @@ class HXDumper {
           this.writeIndentSpaces();
           this.dumpValue(input.extraBottomStatement);
           this.writer.write(";");
-          this.writeLineBreak();
+          this.writer.writeLineBreak();
         } else {
           this.writer.write(";");
-          this.writeLineBreak();
+          this.writer.writeLineBreak();
           this.writeIndentSpaces();
           this.dumpValue(input.extraBottomStatement);
         }
@@ -2080,7 +2080,7 @@ class HXDumper {
 
       this.writer.write(";");
 
-      this.writeLineBreak();
+      this.writer.writeLineBreak();
     }
   }
 
@@ -2261,14 +2261,10 @@ class HXDumper {
     this.writer.write(this.indentSpaces(steps));
   }
 
-  writeLineBreak() {
-    this.writer.write("\n");
-  }
-
   writeIndentedLine(str) {
     this.writeIndentSpaces();
     this.writer.write(str);
-    this.writeLineBreak();
+    this.writer.writeLineBreak();
   }
 
   indentSpaces(steps) {
